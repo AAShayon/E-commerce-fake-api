@@ -133,6 +133,14 @@ class _AllProductsState extends State<AllProducts> {
                        ),
                      ),
                      SizedBox(height: 20.h,),
+                     Container(
+                       decoration: BoxDecoration(
+                         borderRadius: BorderRadius.circular(10),
+                         color: Colors.transparent
+                       ),
+                       child: Padding(padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 10.h),
+                       child: Center(child: Text('Product List',style: Theme.of(context).textTheme.bodyLarge,)),),
+                     ),
                      !productViewModel.isLoading && productViewModel.product.isNotEmpty && productViewModel.product!=null ?
                      GridView.builder(
                        shrinkWrap: true,
@@ -165,21 +173,35 @@ class _AllProductsState extends State<AllProducts> {
                                      imagePath: product.image,boxFit: BoxFit.fill,borderRadius: BorderRadius.circular(10),
                                    ),
                                  ),
-                                 const Text('\$6000'),
+                                  Text('\$${product.price}'),
                                  SizedBox(height: 2.h,),
-                                 InkWell(
-                                   onTap: (){},
-                                   child: Container(
-                                     decoration: BoxDecoration(
-                                       borderRadius: BorderRadius.circular(10),
-                                       color: Colors.green,
-                                     ),
-                                     child: Padding(
-                                       padding:  EdgeInsets.symmetric(vertical: 5.h
-                                           ,horizontal: 8.w),
-                                       child: const Text('Add To Cart'),
-                                     ),
+                                 Container(
+                                   height: 25.h,
+                                   decoration: BoxDecoration(
+                                     borderRadius: BorderRadius.circular(10),
+                                     color: Colors.green,
                                    ),
+                                   child: productViewModel.getItemCount(index) > 0 ? Center(
+                                     child: Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                       crossAxisAlignment: CrossAxisAlignment.center,
+                                       children: [
+                                         IconButton(onPressed: (){
+                                           productViewModel.decrementItemCount(index);
+                                         }, icon:  Icon(Icons.remove,size: 10.sp,)),
+                                         Text("${productViewModel.getItemCount(index)}",style: Theme.of(context).textTheme.labelMedium,),
+                                         IconButton(onPressed: (){
+                                           productViewModel.incrementItemCount(index);
+                                         }, icon:  Icon(Icons.add,size: 10.sp,))
+                                       ],
+                                     ),
+                                   ):InkWell(
+                                       onTap: (){
+                                         productViewModel.incrementItemCount(index);
+                                       },child: Padding(
+                                         padding:  EdgeInsets.symmetric(vertical: 5.h,horizontal: 8.w),
+                                         child: const Text('Add To Cart'),
+                                       )),
                                  )
                                ],
                              ),

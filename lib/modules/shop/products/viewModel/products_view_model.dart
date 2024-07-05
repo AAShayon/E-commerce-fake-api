@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:e_commerce_complete_fake_api/model/service/api_response.dart';
+import 'package:e_commerce_complete_fake_api/modules/shop/products/model/core/response_model/category_wise_product_response_model.dart';
 import 'package:e_commerce_complete_fake_api/modules/shop/products/model/core/response_model/product_response_model.dart';
 import 'package:e_commerce_complete_fake_api/modules/shop/products/model/service/remote/product_service.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class  ProductsViewModel extends ChangeNotifier{
   ProductService _productService=ProductServiceRemoteDataSource();
   bool _isLoading=false;
   List<ProductResponseModel> _product=[];
+  // List<CategoryWiseProductResponseModel> _categoryProduct=[];
   final Map<int ,int> _itemCounts={};
 
  bool get isLoading => _isLoading;
@@ -74,6 +76,56 @@ class  ProductsViewModel extends ChangeNotifier{
    }
    notifyListeners();
    return isProductFetched;
+ }
+ Future<bool> categoriesProduct(BuildContext context,{required String categoryName})async{
+   _isLoading=true;
+   bool isFetch=false;
+   _product=[];
+   try{
+     ApiResponse apiResponse=await _productService.category(categoryName);
+     if(apiResponse.response!.statusCode != null){
+       if(apiResponse.response!.statusCode == 200){
+         _product=(apiResponse.response!.data as List).map((data)=>ProductResponseModel.fromJson(data)).toList();
+         isFetch=true;
+         _isLoading=false;
+         notifyListeners();
+         if(context.mounted){
+           ScaffoldMessenger.of(context).removeCurrentSnackBar();
+           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,duration: Duration(milliseconds: 3),content:Text('SuccessFully')));
+         }
+
+       }else{
+         isFetch=false;
+         _isLoading=false;
+         notifyListeners();
+         if(context.mounted){
+           ScaffoldMessenger.of(context).removeCurrentSnackBar();
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,duration: const Duration(milliseconds: 3),content:Text('${apiResponse.response!.statusCode}')));
+         }
+       }
+
+     }else{
+       isFetch=false;
+       _isLoading=false;
+       notifyListeners();
+       if(context.mounted){
+         ScaffoldMessenger.of(context).removeCurrentSnackBar();
+         ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,duration: const Duration(milliseconds: 3),content:Text('${apiResponse.error}')));
+       }
+     }
+
+   }catch(e){
+     _isLoading=false;
+     isFetch=false;
+     notifyListeners();
+     if(context.mounted){
+       ScaffoldMessenger.of(context).removeCurrentSnackBar();
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(backgroundColor: Colors.red,duration: const Duration(milliseconds: 3),content:Text('$e')));
+     }
+   }
+   notifyListeners();
+   return isFetch;
+
  }
  //  final ProductService _productService=ProductServiceRemoteDataSource();
  //  bool _isLoading=false;

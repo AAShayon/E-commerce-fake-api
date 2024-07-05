@@ -3,45 +3,6 @@ import 'package:e_commerce_complete_fake_api/model/core/api_urls.dart';
 import 'package:e_commerce_complete_fake_api/model/service/api_error_handler.dart';
 import 'package:e_commerce_complete_fake_api/model/service/api_response.dart';
 import 'package:e_commerce_complete_fake_api/model/service/dio_service.dart';
-
-// abstract class ProductService{
-//   Future<ApiResponse> productList();
-//   Future<ApiResponse> category();
-// }
-//
-// class ProductServiceRemoteDataSource extends ProductService{
-//   static final ProductServiceRemoteDataSource _singleton=ProductServiceRemoteDataSource._internal();
-//   late DioService _dioService;
-//
-//   factory ProductServiceRemoteDataSource(){
-//     return _singleton;
-//   }
-//   ProductServiceRemoteDataSource._internal(){
-//     _dioService;
-//   }
-//
-//   @override
-//   Future<ApiResponse> category()async {
-//     try{
-//       Response? response=await _dioService.get(ApiUrls().categories);
-//       return ApiResponse.withSuccess(response!);
-//     }
-//     catch(e){
-//       return ApiResponse.withError(ApiErrorHandler.getErrorMessage(e));
-//     }
-//   }
-//
-//   @override
-//   Future<ApiResponse> productList() async{
-//    try{
-//      Response? response=await _dioService.get(ApiUrls().allProducts);
-//      return ApiResponse.withSuccess(response!);
-//    }catch(e){
-//      return ApiResponse.withError(ApiErrorHandler.getErrorMessage(e));
-//    }
-//   }
-//
-// }
 abstract class ProductService {
   Future<ApiResponse> productList();
 

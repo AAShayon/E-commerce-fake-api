@@ -1,5 +1,6 @@
 import 'package:any_image_view/any_image_view.dart';
 import 'package:e_commerce_complete_fake_api/modules/shop/products/model/core/category_model.dart';
+import 'package:e_commerce_complete_fake_api/modules/shop/products/view/widgets/categories_product_screen.dart';
 import 'package:e_commerce_complete_fake_api/modules/shop/products/viewModel/products_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,7 +89,8 @@ class _AllProductsState extends State<AllProducts> {
                              SizedBox(
                                height: 100.h,
                                child: Center(
-                                 child: GridView.builder(
+                                 child:
+                                 GridView.builder(
                                    scrollDirection: Axis.horizontal,
                                    shrinkWrap: true,
                                    itemCount: categories.length,
@@ -100,26 +102,34 @@ class _AllProductsState extends State<AllProducts> {
 
                                    ),
                                    itemBuilder: (context,index) {
-                                     return Container(
-                                       height: 50.h,
-                                       width: 50.w,
+                                     return InkWell(
+                                       onTap: () async{
+                                         await productViewModel.categoriesProduct(context, categoryName: categories[index].categoryName).then((v){
+                                           Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryProductScreen(name:categories[index].categoryName ,)));
+                                         });
 
-                                       decoration: BoxDecoration(
-                                         color: Colors.white.withOpacity(.5),
-                                         borderRadius: BorderRadius.circular(10)
-                                       ),
-                                       child: Padding(
-                                         padding:  EdgeInsets.symmetric(vertical: 5.h,horizontal: 5.w),
-                                         child: Column(
-                                           children: [
-                                             Image.asset(
-                                               categories[index].imageUrl ,color: Colors.green.withOpacity(.5),
-                                               height: 20.sp,
-                                               width: 20.sp,
+                                       },
+                                       child: Container(
+                                         height: 50.h,
+                                         width: 50.w,
 
-                                             ),
-                                             Text(categories[index].categoryName,style: Theme.of(context).textTheme.labelSmall,overflow: TextOverflow.ellipsis,)
-                                           ],
+                                         decoration: BoxDecoration(
+                                           color: Colors.white.withOpacity(.5),
+                                           borderRadius: BorderRadius.circular(10)
+                                         ),
+                                         child: Padding(
+                                           padding:  EdgeInsets.symmetric(vertical: 5.h,horizontal: 5.w),
+                                           child: Column(
+                                             children: [
+                                               Image.asset(
+                                                 categories[index].imageUrl ,color: Colors.green.withOpacity(.5),
+                                                 height: 20.sp,
+                                                 width: 20.sp,
+
+                                               ),
+                                               Text(categories[index].categoryName,style: Theme.of(context).textTheme.labelSmall,overflow: TextOverflow.ellipsis,)
+                                             ],
+                                           ),
                                          ),
                                        ),
                                      );
